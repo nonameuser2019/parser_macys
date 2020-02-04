@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="26cdc9bf-2b1d-4b31-877b-b790f540422b" name="Default Changelist" comment="" />
+    <list default="true" id="26cdc9bf-2b1d-4b31-877b-b790f540422b" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/model.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/parser.py" beforeDir="false" afterPath="$PROJECT_DIR$/parser.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test_card.py" beforeDir="false" afterPath="$PROJECT_DIR$/test_card.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -14,7 +19,11 @@
       </list>
     </option>
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="ProjectId" id="1XF3sf1L8DKWNLjDLPrkez5rjfp" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showExcludedFiles" value="true" />
@@ -22,8 +31,30 @@
   </component>
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
   </component>
-  <component name="RunManager" selected="Python.test">
+  <component name="RunManager" selected="Python.parser">
+    <configuration name="model" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="parser_macys" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/model.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="parser" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="parser_macys" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -89,9 +120,10 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.test" />
-        <item itemvalue="Python.test_card" />
         <item itemvalue="Python.parser" />
+        <item itemvalue="Python.model" />
+        <item itemvalue="Python.test_card" />
+        <item itemvalue="Python.test" />
       </list>
     </recent_temporary>
   </component>
@@ -121,22 +153,26 @@
     <servers />
   </component>
   <component name="WindowStateProjectService">
-    <state width="1879" height="279" key="GridCell.Tab.0.bottom" timestamp="1580765212956">
+    <state x="738" y="275" key="FileChooserDialogImpl" timestamp="1580842770515">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1879" height="279" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1580765212956" />
-    <state width="1879" height="279" key="GridCell.Tab.0.center" timestamp="1580765212956">
+    <state x="738" y="275" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1580842770515" />
+    <state width="1879" height="279" key="GridCell.Tab.0.bottom" timestamp="1580842771632">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1879" height="279" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1580765212956" />
-    <state width="1879" height="279" key="GridCell.Tab.0.left" timestamp="1580765212956">
+    <state width="1879" height="279" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1580842771632" />
+    <state width="1879" height="279" key="GridCell.Tab.0.center" timestamp="1580842771632">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1879" height="279" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1580765212956" />
-    <state width="1879" height="279" key="GridCell.Tab.0.right" timestamp="1580765212956">
+    <state width="1879" height="279" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1580842771632" />
+    <state width="1879" height="279" key="GridCell.Tab.0.left" timestamp="1580842771632">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1879" height="279" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1580765212956" />
+    <state width="1879" height="279" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1580842771632" />
+    <state width="1879" height="279" key="GridCell.Tab.0.right" timestamp="1580842771632">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1879" height="279" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1580842771632" />
     <state width="1881" height="344" key="GridCell.Tab.1.bottom" timestamp="1580655065895">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -153,10 +189,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1881" height="344" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1580655065895" />
-    <state x="654" y="344" key="com.intellij.ide.util.TipDialog" timestamp="1580757234530">
+    <state x="654" y="344" key="com.intellij.ide.util.TipDialog" timestamp="1580835127630">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="654" y="344" key="com.intellij.ide.util.TipDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1580757234530" />
+    <state x="654" y="344" key="com.intellij.ide.util.TipDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1580835127630" />
     <state x="606" y="135" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser" timestamp="1580761547508">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>

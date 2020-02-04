@@ -2,6 +2,8 @@ from bs4 import BeautifulSoup
 import requests
 import random
 import time
+import re
+from model import *
 
 proxy = {'HTTPS': '163.172.182.164:3128'}
 url = 'https://www.macys.com/shop/womens-clothing/calvin-klein-dresses?id=62066&edge=hybrid'
@@ -14,6 +16,9 @@ cookies = {
 }
 cat_url_list = []
 url_list = []
+color_list = []
+size_list = []
+details_list = []
 
 
 def read_file_url():
@@ -61,7 +66,68 @@ def get_page_count(html):
 
 
 def parser_card(html):
-
+    soup = BeautifulSoup(html.content, 'html.parser')
+    try:
+        # название товара
+        name = soup.find('h1', class_='p-name h3').text.strip()
+    except:
+        name = ''
+    try:
+        # парсинг полной цены
+        full_price = soup.find('div', class_='price').text.strip()
+        price = re.findall(r'\d*[.]\d+', full_price)[0]
+    except:
+        price = None
+    try:
+        # цена с скидкой
+        sale_price = soup.find('span', {'data-auto': 'sale-price'}).text.strip()
+        discount_price = re.findall(r'\d*[.]\d+', sale_price)[0]
+    except:
+        discount_price = None
+    try:
+        # категория товара
+        category = soup.find_all('a', class_='breadcrumbs-item')
+        cat_name = category[0].text + '/' + category[1].text
+    except:
+        cat_name = None
+    try:
+        c_list = soup.find_all('li', class_='color-swatch')
+        for i in c_list:
+            try:
+                color = i.find('div', class_='color-swatch-div')['aria-label']
+                color_list.append(color)
+            except:
+                continue
+    except:
+        color_list.append('')
+    try:
+        color = soup.find('div', class_='color-header').find('strong').text
+    except:
+        color = None
+    try:
+        ul = soup.find('ul', class_='medium-float-children swatches-scroller c-reset').find_all('li')
+        for li in ul:
+            if li['aria-disabled'] == 'false':
+                size_list.append(li.text.strip())
+    except:
+        size_list.append('')
+    try:
+        details = soup.find('ul', {'data-auto': 'product-description-bullets'}).find_all('li')
+        for i in details:
+            details_list.append(i.text)
+    except:
+        details_list.append('')
+    image_name = ['1', '2', '3'] # временная переменная
+    Session = sessionmaker(bind=db_engine)
+    session = Session()
+    new_element = Macys(name, price, discount_price, cat_name, color,','.join(color_list), ','.join(size_list),
+                        ','.join(details_list), ','.join(image_name))
+    session.add(new_element)
+    session.commit()
+    color_list.clear()
+    size_list.clear()
+    details_list.clear()
+    image_name.clear()
 
 
 def main():
@@ -75,7 +141,9 @@ def main():
             link = sub_url[0] + page_idex + str(i) + '?' + sub_url[1]
             html = get_html(link)
             url_list = get_url_category(html)
-    print(len(url_list))
+    for url in url_list:
+        html = get_html(url)
+        parser_card(html)
 
 
 
