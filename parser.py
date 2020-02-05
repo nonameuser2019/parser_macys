@@ -4,6 +4,7 @@ import random
 import time
 import re
 from model import *
+import os
 
 proxy = {'HTTPS': '163.172.182.164:3128'}
 url = 'https://www.macys.com/shop/womens-clothing/calvin-klein-dresses?id=62066&edge=hybrid'
@@ -19,7 +20,7 @@ url_list = []
 color_list = []
 size_list = []
 details_list = []
-
+count_photo = 0
 
 def read_file_url():
     with open('input.txt', 'r') as file:
@@ -30,7 +31,8 @@ def read_file_url():
 
 def get_html(url, payload=None):
     while True:
-        time.sleep(random.randint(random.randint(6, 10), random.randint(12, 27)))
+        #time.sleep(random.randint(random.randint(6, 10), random.randint(12, 27)))
+        #time.sleep(2)
         html = requests.get(url, headers=HEADERS, proxies=proxy, params=payload, cookies=cookies)
         if html.status_code == 200:
             print(html.status_code)
@@ -50,6 +52,7 @@ def get_url_category(html):
     soup = BeautifulSoup(html.content, 'html.parser')
     link_list = soup.find_all('li', class_='cell')
     for i in link_list:
+        print(html.url)
         url = i.find('a', class_='productDescLink')['href']
         url_list.append('https://www.macys.com/' + url)
     return url_list
@@ -65,7 +68,7 @@ def get_page_count(html):
         return int(page_count)
 
 
-def parser_card(html):
+def parser_card(html, image_name):
     soup = BeautifulSoup(html.content, 'html.parser')
     try:
         # название товара
@@ -85,9 +88,15 @@ def parser_card(html):
     except:
         discount_price = None
     try:
+        # процент скидки
+        percent_text = soup.find('span', {'data-auto': 'percent-off'}).text.strip()
+        percent = re.findall(r'\d+', percent_text)[0] + '%'
+    except:
+        percent = None
+    try:
         # категория товара
         category = soup.find_all('a', class_='breadcrumbs-item')
-        cat_name = category[0].text + '/' + category[1].text
+        cat_name = category[1].text + '/' + category[2].text
     except:
         cat_name = None
     try:
@@ -117,11 +126,11 @@ def parser_card(html):
             details_list.append(i.text)
     except:
         details_list.append('')
-    image_name = ['1', '2', '3'] # временная переменная
+    url = html.url
     Session = sessionmaker(bind=db_engine)
     session = Session()
-    new_element = Macys(name, price, discount_price, cat_name, color,','.join(color_list), ','.join(size_list),
-                        ','.join(details_list), ','.join(image_name))
+    new_element = Macys(name, price, discount_price, percent, cat_name, color,','.join(color_list), ','.join(size_list),
+                        ','.join(details_list), ','.join(image_name), url)
     session.add(new_element)
     session.commit()
     color_list.clear()
@@ -130,7 +139,56 @@ def parser_card(html):
     image_name.clear()
 
 
+def create_dir_name():
+    dir_name = 'images'
+    try:
+        os.mkdir(dir_name)
+    except OSError:
+        print('Папка существует')
+    return dir_name
+
+
+def get_photo(html, dir_name):
+    img_name = []
+    image_list = []
+    payload = {
+        'size': 'small',
+        'clientId': 'PROS',
+        '_shoppingMode': 'SITE',
+        '_customerState': 'GUEST',
+        'currencyCode': 'USD',
+        '_regionCode': 'US'
+    }
+    sub_url_1 = 'https://slimages.macysassets.com/is/image/MCY/products/'
+    sub_url_2 = '?op_sharpen=1&wid=1230&hei=1500&fit=fit,1&$filterxlrg$'
+    api_url = 'https://www.macys.com/xapi/digital/v1/product/'
+    soup = BeautifulSoup(html.content, 'html.parser')
+    ul = soup.find('ul', {'data-auto': 'product-description-bullets'}).find_all('li')[-1].text
+    id = re.findall(r'\d+', ul)
+    response = requests.get(api_url + id[0], headers=HEADERS, proxies=proxy, cookies=cookies, params=payload)
+    for img in response.json()['product'][0]['imagery']['images']:
+        image_url = sub_url_1 + img['filePath'] + sub_url_2
+        image_list.append(image_url)
+    for img in image_list:
+        try:
+            global count_photo
+            photo_name = count_photo
+            file_obj = requests.get(img, stream=True)
+            if file_obj.status_code == 200:
+                with open(dir_name + '/' + str(photo_name) + '.JPG', 'bw') as photo:
+                    for chunk in file_obj.iter_content(8192):
+                        photo.write(chunk)
+                count_photo += 1
+                img_name.append(str(photo_name))
+        except:
+            print('Error file_obj')
+    return img_name
+
+
+
 def main():
+    count = 1
+    dir_name = create_dir_name()
     cat_url_list = read_file_url()
     for cat_url in cat_url_list:
         html = get_html(cat_url)
@@ -139,12 +197,16 @@ def main():
             page_idex = '/Pageindex/'
             sub_url = cat_url.split('?')
             link = sub_url[0] + page_idex + str(i) + '?' + sub_url[1]
+            print(link)
             html = get_html(link)
             url_list = get_url_category(html)
+    print(f'Всего товаров для парсинга{len(url_list)}')
     for url in url_list:
         html = get_html(url)
-        parser_card(html)
-
+        image_name = get_photo(html, dir_name)
+        parser_card(html, image_name)
+        print(f'Всего товаров для парсинга{len(url_list)} спарсили {count}')
+        count += 1
 
 
 if __name__ == '__main__':
