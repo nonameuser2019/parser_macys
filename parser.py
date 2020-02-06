@@ -50,11 +50,13 @@ def get_html(url, payload=None):
 def get_url_category(html):
     # функция которая парсит все ссылки с категории товара
     soup = BeautifulSoup(html.content, 'html.parser')
-    link_list = soup.find_all('li', class_='cell')
+    link_list = soup.find('div', class_='sortableGrid').find_all('li', class_='cell')
     for i in link_list:
-        print(html.url)
-        url = i.find('a', class_='productDescLink')['href']
-        url_list.append('https://www.macys.com/' + url)
+        try:
+            url = i.find('a', class_='productDescLink')['href']
+            url_list.append('https://www.macys.com/' + url)
+        except:
+            continue
     return url_list
 
 
@@ -79,8 +81,9 @@ def parser_card(html, image_name):
         # парсинг полной цены
         full_price = soup.find('div', class_='price').text.strip()
         price = re.findall(r'\d*[.]\d+', full_price)[0]
-    except:
-        price = None
+    except AttributeError:
+        full_price = soup.find('div', class_='on-sale').text.strip()
+        price = re.findall(r'\d*[.]\d+', full_price)[0]
     try:
         # цена с скидкой
         sale_price = soup.find('span', {'data-auto': 'sale-price'}).text.strip()
@@ -205,7 +208,7 @@ def main():
         html = get_html(url)
         image_name = get_photo(html, dir_name)
         parser_card(html, image_name)
-        print(f'Всего товаров для парсинга{len(url_list)} спарсили {count}')
+        print(f'Всего товаров для парсинга {len(url_list)} спарсили {count}')
         count += 1
 
 

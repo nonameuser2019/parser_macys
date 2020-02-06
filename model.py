@@ -40,5 +40,21 @@ class Macys(Base):
         return "CData '%s'" % (self.url)
 
 
+class MacysPrice(Base):
+    __tablename__ = "price_product"
+    id = Column(Integer, primary_key=True)
+    price = Column(Float)
+    price_sale = Column(String)
+    url = Column(String)
+
+    def __init__(self, price, price_sale, url):
+        self.price = price
+        self.price_sale = price_sale
+        self.url = url
+
+    def __repr__(self):
+        return "CData '%s'" % (self.url)
+
+
 db_engine = create_engine("sqlite:///macys.db", echo=True)
 Base.metadata.create_all(db_engine)
