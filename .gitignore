@@ -1,5 +1,5 @@
-.venv/
-.images/
+/.venv/
+images/
 test.py
 test-card.py
 

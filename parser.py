@@ -32,7 +32,6 @@ def read_file_url():
 def get_html(url, payload=None):
     while True:
         #time.sleep(random.randint(random.randint(6, 10), random.randint(12, 27)))
-        #time.sleep(2)
         html = requests.get(url, headers=HEADERS, proxies=proxy, params=payload, cookies=cookies)
         if html.status_code == 200:
             print(html.status_code)
@@ -108,26 +107,37 @@ def parser_card(html, image_name):
     except:
         cat_name = None
     try:
+        #парсим цвета
         c_list = soup.find_all('li', class_='color-swatch')
         for i in c_list:
             try:
-                color = i.find('div', class_='color-swatch-div')['aria-label']
-                color_list.append(color)
+                color_tag = i.find('div', class_='color-swatch-div')['aria-label']
+                color_list.append(color_tag)
             except:
                 continue
     except:
         color_list.append('')
     try:
-        color = soup.find('div', class_='color-header').find('strong').text
+        color_tag = soup.find('div', class_='color-header').find('strong').text
+    except:
+        color_tag = None
+    try:
+        color = color_list[0]
     except:
         color = None
     try:
+        # парсим размеры
         ul = soup.find('ul', class_='medium-float-children swatches-scroller c-reset').find_all('li')
         for li in ul:
             if li['aria-disabled'] == 'false':
                 size_list.append(li.text.strip())
     except:
-        size_list.append('')
+        try:
+            size_tag = soup.find('strong', {'data-auto': 'selected-size'}).text.strip()
+            size_list.append(size_tag)
+        except:
+            size_list.append('')
+
     try:
         details = soup.find('ul', {'data-auto': 'product-description-bullets'}).find_all('li')
         for i in details:
@@ -209,7 +219,6 @@ def main():
             page_idex = '/Pageindex/'
             sub_url = cat_url.split('?')
             link = sub_url[0] + page_idex + str(i) + '?' + sub_url[1]
-            print(link)
             html = get_html(link)
             url_list = get_url_category(html)
     print(f'Всего товаров для парсинга{len(url_list)}')
