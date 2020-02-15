@@ -9,7 +9,7 @@ import os
 proxy = {'HTTPS': '163.172.182.164:3128'}
 url = 'https://www.macys.com/shop/womens-clothing/calvin-klein-dresses?id=62066&edge=hybrid'
 HEADERS = {
-    'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:71.0) Gecko/20100101 Firefox/71.0',
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36',
 }
 cookies = {
     'shippingCountry': 'US',
@@ -26,7 +26,7 @@ session = Session()
 
 
 def read_file_url():
-    with open('input.txt', 'r') as file:
+    with open('input_tommy.txt', 'r') as file:
         for line in file:
             cat_url_list.append(line.strip('\n'))
     return cat_url_list
@@ -149,12 +149,12 @@ def parser_card(html, image_name):
         details_list.append('')
     url = html.url
     try:
-        new_element = Macys(name, price, discount_price, percent, cat_name, color,','.join(color_list), ','.join(size_list),
+        new_element = MacysTommy(name, price, discount_price, percent, cat_name, color,','.join(color_list), ','.join(size_list),
                             ','.join(details_list), ','.join(image_name), url)
         session.add(new_element)
         session.commit()
     except:
-        with open('error.txt', 'a') as write_file:
+        with open('errorTommy.txt', 'a') as write_file:
             write_file.writelines(html.url)
     color_list.clear()
     size_list.clear()
@@ -163,7 +163,7 @@ def parser_card(html, image_name):
 
 
 def create_dir_name():
-    dir_name = 'images'
+    dir_name = 'imagesTommy'
     try:
         os.mkdir(dir_name)
     except OSError:
@@ -176,7 +176,7 @@ def chek_images():
     num_file = []
     last_image = 0
     try:
-        file_list = os.listdir('images')
+        file_list = os.listdir('imagesTommy')
         for list in file_list:
             num_file.append(int(re.findall(r'\d*', list)[0]))
         num_file.sort()
@@ -240,7 +240,7 @@ def main():
             url_list = get_url_category(html)
     print(f'Всего товаров для парсинга{len(url_list)}')
     for url in url_list:
-        card_exist = session.query(Macys.url).filter(Macys.url == url).count()
+        card_exist = session.query(MacysTommy.url).filter(MacysTommy.url == url).count()
         if not card_exist:
             html = get_html(url)
             image_name = get_photo(html, dir_name)

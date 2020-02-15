@@ -17,7 +17,6 @@ cookies = {
 }
 cat_url_list = []
 
-
 def read_file_url():
     with open('input.txt', 'r') as file:
         for line in file:
@@ -71,7 +70,7 @@ def parser_price(html):
                 discount = None
             Session = sessionmaker(bind=db_engine)
             session = Session()
-            new_element = MacysPrice(price, discount, url)
+            new_element = MacysPriceTommy(price, discount, url)
             session.add(new_element)
             session.commit()
         except:
