@@ -82,8 +82,13 @@ def parser_card(html, image_name):
         full_price = soup.find('div', class_='price').text.strip()
         price = re.findall(r'\d*[.]\d+', full_price)[0]
     except AttributeError:
-        full_price = soup.find('div', class_='on-sale').text.strip()
-        price = re.findall(r'\d*[.]\d+', full_price)[0]
+        try:
+            full_price = soup.find('div', class_='on-sale').text.strip()
+            price = re.findall(r'\d*[.]\d+', full_price)[0]
+        except:
+            price = None
+            with open('price_error.txt', 'a') as write_file:
+                write_file.writelines(html.url)
     try:
         # цена с скидкой
         sale_price = soup.find('span', {'data-auto': 'sale-price'}).text.strip()
@@ -132,10 +137,14 @@ def parser_card(html, image_name):
     url = html.url
     Session = sessionmaker(bind=db_engine)
     session = Session()
-    new_element = Macys(name, price, discount_price, percent, cat_name, color,','.join(color_list), ','.join(size_list),
-                        ','.join(details_list), ','.join(image_name), url)
-    session.add(new_element)
-    session.commit()
+    try:
+        new_element = Macys(name, price, discount_price, percent, cat_name, color,','.join(color_list), ','.join(size_list),
+                            ','.join(details_list), ','.join(image_name), url)
+        session.add(new_element)
+        session.commit()
+    except:
+        with open('error.txt', 'a') as write_file:
+            write_file.writelines(html.url)
     color_list.clear()
     size_list.clear()
     details_list.clear()

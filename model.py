@@ -12,7 +12,7 @@ class Macys(Base):
 
     id = Column(Integer, primary_key=True)
     product_name = Column(String)
-    price = Column(Float)
+    price = Column(String)
     price_sale = Column(String)
     percent = Column(String)
     category = Column(String)
@@ -43,7 +43,7 @@ class Macys(Base):
 class MacysPrice(Base):
     __tablename__ = "price_product"
     id = Column(Integer, primary_key=True)
-    price = Column(Float)
+    price = Column(String)
     price_sale = Column(String)
     url = Column(String)
 
